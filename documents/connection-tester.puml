@@ -1,0 +1,17 @@
+@startuml
+actor User
+participant "ConnectionTestServlet" as Servlet
+participant "ConnectionTester" as Tester
+database "DB(MariaDB)" as DB
+
+User -> Servlet : HTTP GET /administer/post/connectoin-test
+Servlet -> Tester : new ConnectionTester()
+Servlet -> Tester : test()
+Tester -> Tester : Class.forName(RDB_DRIVE)
+Tester -> DB : DriverManager.getConnection(URL, USER, PASSWD)
+DB --> Tester : Connectionオブジェクト or Exception
+Tester -> Tester : con.close()
+Tester --> Servlet : (標準出力に結果)
+Servlet --> User : (HTTPレスポンス)
+
+@enduml

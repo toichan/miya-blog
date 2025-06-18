@@ -1,0 +1,14 @@
+@startuml
+actor 編集者 as Admin
+participant "HomeServlet" as Servlet
+participant "home.jsp" as JSP
+
+Admin -> Servlet : GET /administer/post/home
+activate Servlet
+Servlet -> JSP : forward("/WEB-INF/administer/post/home.jsp")
+activate JSP
+JSP --> Servlet : レンダリング結果(HTML)
+deactivate JSP
+Servlet --> Admin : HTMLレスポンス
+deactivate Servlet
+@enduml
