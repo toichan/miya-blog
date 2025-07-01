@@ -1,0 +1,32 @@
+@startuml administer-post-execute-create
+actor 管理者 as Admin
+participant "ブラウザ" as Browser
+participant "ExecuteCreateServlet\n(/administer/post/execute-create)" as ExecuteCreateServlet
+participant "PostsDao" as Dao
+database "DB(MySQL)" as DB
+participant "HomeServlet\n(/administer/post/home)" as HomeServlet
+participant "home.jsp" as HomeJsp
+
+Admin -> Browser : タイトル・記事を入力し「作成」ボタン押下
+activate Browser
+Browser -> ExecuteCreateServlet : POST /administer/post/execute-create (title, text)
+activate ExecuteCreateServlet
+ExecuteCreateServlet -> Dao : create(post)
+activate Dao
+Dao -> DB : INSERT INTO posts ...
+activate DB
+DB --> Dao : 登録結果
+deactivate DB
+Dao --> ExecuteCreateServlet : 戻り値なし
+deactivate Dao
+ExecuteCreateServlet -> Browser : リダイレクト /administer/post/home?message=...
+deactivate ExecuteCreateServlet
+Browser -> HomeServlet : GET /administer/post/home?message=...
+activate HomeServlet
+HomeServlet -> HomeJsp : forward
+activate HomeJsp
+HomeJsp -> Browser : 投稿一覧画面表示（メッセージ付き）
+deactivate HomeJsp
+deactivate HomeServlet
+deactivate Browser
+@enduml

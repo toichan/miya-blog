@@ -1,0 +1,36 @@
+@startuml administer-post-read
+actor User
+participant "ブラウザ" as Browser
+participant "HomeServlet" as Servlet
+participant "home.jsp" as JSP
+participant "PostsDao" as Dao
+participant "ConnectionManager" as ConnMgr
+database "DB(MySQL)" as DB
+
+User -> Browser : /administer/post/home にアクセス
+Browser -> Servlet : HTTP GET /administer/post/home
+activate Servlet
+Servlet -> Dao : new PostsDao()
+activate Dao
+Servlet -> Dao : getAll()
+Dao -> ConnMgr : getConnection()
+activate ConnMgr
+ConnMgr -> DB : DriverManager.getConnection(URL, USER, PASSWD)
+activate DB
+DB --> ConnMgr : Connectionオブジェクト
+deactivate DB
+ConnMgr --> Dao : Connection
+deactivate ConnMgr
+Dao -> DB : SELECT * FROM posts
+activate DB
+DB --> Dao : 結果セット
+deactivate DB
+Dao --> Servlet : List<Post>
+deactivate Dao
+Servlet -> JSP : forward(posts)
+activate JSP
+JSP -> JSP : JSTLでpostsをループ表示
+JSP --> Browser : 投稿一覧HTMLを返す
+deactivate JSP
+deactivate Servlet
+@enduml

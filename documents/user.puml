@@ -1,0 +1,17 @@
+@startuml
+class User {
+    - int userId
+    - String userName
+    - String password
+
+    + User(int userId, String userName, String password)
+    + int getUserId()
+    + String getUserName()
+    + String getPassword()
+    + void setUserName(String userName)
+    + void setPassword(String password)
+    - void checkUserId(int userId)
+    - void checkUserName(String userName)
+    - void checkPassword(String password)
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+class UsersDao {
+    +void create(User user)
+    +User getOne(int userId)
+    +User getOneByUserName(String userName)
+    +void update(User user)
+    +void delete(int userId)
+}
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+class Post {
+    - int postId
+    - LocalDateTime createdAt
+    - LocalDateTime updatedAt
+    - String postTitle
+    - String postText
+    - int userId
+
+    + Post(int postId, LocalDateTime createdAt, LocalDateTime updatedAt, String postTitle, String postText, int userId)
+    + int getPostId()
+    + LocalDateTime getCreatedAt()
+    + LocalDateTime getUpdatedAt()
+    + String getPostTitle()
+    + String getPostText()
+    + int getUserId()
+    + void setUpdatedAt(LocalDateTime updatedAt)
+    + void setPostTitle(String postTitle)
+    + void setPostText(String postText)
+    - void checkPostId(int postId)
+    - void checkCreatedAt(LocalDateTime createdAt)
+    - void checkPostTitle(String postTitle)
+    - void checkPostText(String postText)
+    - void checkUserId(int userId)
+}
+@enduml

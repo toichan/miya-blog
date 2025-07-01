@@ -1,0 +1,10 @@
+' filepath: /Users/t.toida/ghq/github.com/toichan/miya-blog/src/main/java/dao/PostsDao.java
+@startuml
+class PostsDao {
+    +void create(Post post)
+    +Post getOne(int postId)
+    +List<Post> getAll()
+    +void update(Post post)
+    +void delete(int postId)
+}
+@enduml

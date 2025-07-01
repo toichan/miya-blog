@@ -1,0 +1,14 @@
+@startuml
+class DaoException {
+    +DaoException(String message, Throwable cause)
+}
+
+class Failure {
+    +Failure(String message, Throwable cause)
+    +Failure(String message)
+}
+
+DaoException --|> Exception
+Failure --|> Exception
+
+@enduml

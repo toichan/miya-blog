@@ -1,0 +1,45 @@
+@startuml administer-post-execute-update
+actor User
+participant "ブラウザ" as Browser
+participant "ExecuteUpdateServlet" as ExecuteUpdateServlet
+participant "PostsDao" as Dao
+participant "ConnectionManager" as ConnMgr
+database "DB(MySQL)" as DB
+
+User -> Browser : フォーム入力・送信
+Browser -> ExecuteUpdateServlet : HTTP POST /administer/post/execute-update
+activate ExecuteUpdateServlet
+ExecuteUpdateServlet -> Dao : new PostsDao()
+activate Dao
+ExecuteUpdateServlet -> Dao : getOne(postId)
+Dao -> ConnMgr : getConnection()
+activate ConnMgr
+ConnMgr -> DB : DriverManager.getConnection(URL, USER, PASSWD)
+activate DB
+DB --> ConnMgr : Connection
+deactivate DB
+ConnMgr --> Dao : Connection
+deactivate ConnMgr
+Dao -> DB : SELECT * FROM posts WHERE post_id=xxx
+activate DB
+DB --> Dao : 結果セット
+deactivate DB
+Dao --> ExecuteUpdateServlet : Post
+ExecuteUpdateServlet -> Dao : update(post)
+Dao -> ConnMgr : getConnection()
+activate ConnMgr
+ConnMgr -> DB : DriverManager.getConnection(URL, USER, PASSWD)
+activate DB
+DB --> ConnMgr : Connection
+deactivate DB
+ConnMgr --> Dao : Connection
+deactivate ConnMgr
+Dao -> DB : UPDATE posts SET ... WHERE post_id=xxx
+activate DB
+DB --> Dao : 更新結果
+deactivate DB
+Dao --> ExecuteUpdateServlet : void
+deactivate Dao
+ExecuteUpdateServlet -> Browser : リダイレクト /administer/post/home?message=...
+deactivate ExecuteUpdateServlet
+@enduml

@@ -1,0 +1,35 @@
+@startuml administer-post-update-form
+actor User
+participant "ブラウザ" as Browser
+participant "UpdateServlet" as UpdateServlet
+participant "update.jsp" as JSP
+participant "PostsDao" as Dao
+participant "ConnectionManager" as ConnMgr
+database "DB(MySQL)" as DB
+
+User -> Browser : 投稿一覧から「更新」ボタンをクリック
+Browser -> UpdateServlet : HTTP GET /administer/post/update?postId=xxx
+activate UpdateServlet
+UpdateServlet -> Dao : new PostsDao()
+activate Dao
+UpdateServlet -> Dao : getOne(postId)
+Dao -> ConnMgr : getConnection()
+activate ConnMgr
+ConnMgr -> DB : DriverManager.getConnection(URL, USER, PASSWD)
+activate DB
+DB --> ConnMgr : Connection
+deactivate DB
+ConnMgr --> Dao : Connection
+deactivate ConnMgr
+Dao -> DB : SELECT * FROM posts WHERE post_id=xxx
+activate DB
+DB --> Dao : 結果セット
+deactivate DB
+Dao --> UpdateServlet : Post
+deactivate Dao
+UpdateServlet -> JSP : forward(post)
+activate JSP
+JSP -> Browser : 更新フォームHTMLを返す
+deactivate JSP
+deactivate UpdateServlet
+@enduml

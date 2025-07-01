@@ -1,0 +1,34 @@
+@startuml administer-post-execute-delete
+actor User
+participant "ブラウザ" as Browser
+participant "home.jsp" as JSP
+participant "ExecuteDeleteServlet" as ExecuteDeleteServlet
+participant "PostsDao" as Dao
+participant "ConnectionManager" as ConnMgr
+database "DB(MySQL)" as DB
+
+User -> Browser : 削除ボタンをクリック
+Browser -> JSP : confirmDelete(postId) 実行
+JSP -> Browser : location.href = '/administer/post/execute-delete?postId=xxx'
+Browser -> ExecuteDeleteServlet : HTTP GET /administer/post/execute-delete?postId=xxx
+activate ExecuteDeleteServlet
+ExecuteDeleteServlet -> Dao : new PostsDao()
+activate Dao
+ExecuteDeleteServlet -> Dao : delete(postId)
+Dao -> ConnMgr : getConnection()
+activate ConnMgr
+ConnMgr -> DB : DriverManager.getConnection(URL, USER, PASSWD)
+activate DB
+DB --> ConnMgr : Connection
+deactivate DB
+ConnMgr --> Dao : Connection
+deactivate ConnMgr
+Dao -> DB : DELETE FROM posts WHERE post_id=xxx
+activate DB
+DB --> Dao : 削除結果
+deactivate DB
+Dao --> ExecuteDeleteServlet : void
+deactivate Dao
+ExecuteDeleteServlet -> Browser : リダイレクト /administer/post/home?message=...
+deactivate ExecuteDeleteServlet
+@enduml

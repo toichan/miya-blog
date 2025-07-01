@@ -1,0 +1,17 @@
+@startuml administer-post-create-form
+actor 管理者 as Admin
+participant "ブラウザ" as Browser
+participant "CreateServlet\n(/administer/post/create)" as CreateServlet
+participant "create.jsp" as CreateJsp
+
+Admin -> Browser : 「新規作成画面」ボタン押下
+activate Browser
+Browser -> CreateServlet : GET /administer/post/create
+activate CreateServlet
+CreateServlet -> CreateJsp : forward
+activate CreateJsp
+CreateJsp -> Browser : 新規作成フォーム表示
+deactivate CreateJsp
+deactivate CreateServlet
+deactivate Browser
+@enduml
